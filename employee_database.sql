@@ -116,3 +116,39 @@ where incentive_amt=
 from incentives
 where incentive_date between'2021-01-01' and '2021-12-31'))
 and d.d_no=e.d_no and a.emp_no=e.emp_no;
+
+select E.ename,(count(*)) 
+from employee E 
+where E.emp_no in (select P.mgr_no 
+                   from employee P 
+                   where P.mgr_no=E.emp_no 
+                   group by E.ename); 
+
+select E.ename 
+from employee E 
+where E.emp_no in (select P.mgr_no 
+                   from employee P
+                   where sal>(select avg(sal)
+                   from employee G 
+                   where G.mgr_no=E.emp_no));
+
+select E.ename
+from employee E
+where E.emp_no in (select P.mgr_no
+                   from employee P
+                   where 1=(select count(sal)
+                   from employee G where G.sal);
+
+select m.ename,count(*) 
+from employee e,employee m 
+where e.mgr_no=m.emp_no 
+group by m.ename 
+having count(*)=(select max(mycount) 
+                 from employee
+                 group by mgr_no) a);
+
+select E.ename
+from employee e,employee m 
+where e.mgr_no=m.emp_no and
+      m.dept_no=e.dept_no;
+
